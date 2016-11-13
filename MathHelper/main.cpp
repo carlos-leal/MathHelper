@@ -2,14 +2,16 @@
 #include <vector>
 #include <math.h>
 #include <string>
+#include <sstream>
 
 bool performOperation(int userChoice);
 bool projections();
-double dotProduct(bool isSilent, std::vector<int> v, std::vector<int> u);
-double findMagintude(bool isSilent, std::vector<int> v);
-std::vector<std::vector<int>> getMatrix();
-std::vector<int> getVector();
-std::string formatVector(std::vector<int> v);
+double dotProduct(bool isSilent, std::vector<double> v, std::vector<double> u);
+double findMagintude(bool isSilent, std::vector<double> v);
+std::vector<std::vector<double>> getMatrix();
+std::vector<double> getVector();
+std::string formatVector(std::vector<double> v);
+
 
 int main()
 {
@@ -45,16 +47,15 @@ bool performOperation(int userChoice)
 	return true;
 }
 
-std::vector<int> getVector()
+std::vector<double> getVector()
 {
 	int n;
 	std::cout << "Enter the size of the vector: ";
 	std::cin >> n;
-	std::vector<int> vector(n);
+	std::vector<double> vector(n);
 
 	for (int i = 0; i < n; i++)
 	{
-		int x;
 		std::cout << "Enter the value at " << i << ": " << std::endl;
 		std::cin >> vector[i];
 	}
@@ -62,7 +63,7 @@ std::vector<int> getVector()
 	return vector;
 }
 
-std::vector<std::vector<int>> getMatrix()
+std::vector<std::vector<double>> getMatrix()
 {
 	int nRows, nCols;
 
@@ -71,7 +72,7 @@ std::vector<std::vector<int>> getMatrix()
 	std::cout << "Enter the number of columns in the matrix: ";
 	std::cin >> nCols;
 
-	std::vector<std::vector <int>> matrix (nRows, std::vector<int> (nCols));
+	std::vector<std::vector <double>> matrix (nRows, std::vector<double> (nCols));
 
 	std::cout << "Enter the entries (left to right order):" << std::endl;
 	for (int i = 0; i < nRows; i++)
@@ -89,21 +90,21 @@ bool projections()
 {
 	std::cout << "Projection of the first vector onto the second.\n\n";
 	std::cout << "Enter the first vector.\n";
-	std::vector<int> v = getVector();
+	std::vector<double> v = getVector();
 	std::cout << "\nEnter the second vector.\n"; 
-	std::vector<int> u = getVector();
+	std::vector<double> u = getVector();
 
 	double coeff = dotProduct(true, v, u) / pow(findMagintude(true, u), 2);
-	for (int i = 0; i < u.size(); i++)
+	for (unsigned int i = 0; i < u.size(); i++)
 	{
 		u[i] *= coeff;
 	}
-	std::cout << "\nThe projection is: \n" << formatVector(u);
+	std::cout << "\nThe projection is: \n" << formatVector(u) << std::endl;
 
 	return true;
 }
 
-double dotProduct(bool isSilent, std::vector<int> v, std::vector<int> u)
+double dotProduct(bool isSilent, std::vector<double> v, std::vector<double> u)
 {
 	int n = v.size();
 	if (n != u.size())
@@ -123,7 +124,7 @@ double dotProduct(bool isSilent, std::vector<int> v, std::vector<int> u)
 	return count;
 }
 
-double findMagintude(bool isSilent, std::vector<int> v)
+double findMagintude(bool isSilent, std::vector<double> v)
 {
 	double magnitude = sqrt(dotProduct(true, v, v));
 	if (!isSilent)
@@ -132,7 +133,21 @@ double findMagintude(bool isSilent, std::vector<int> v)
 	return magnitude;
 }
 
-std::string formatVector(std::vector<int> v)
+std::string formatVector(std::vector<double> v)
 {
+	std::string s = "< ";
+	for (unsigned int i = 0; i < v.size() - 1; i++)
+	{
+		std::stringstream ss;
+		ss << v[i];
+		std::string vi = ss.str();
+		s += vi + ", ";
+	}
+	std::stringstream ss;
+	ss << v.back();
+	std::string vi = ss.str();
+	s += vi + " >";
+
+	return s;
 
 }
