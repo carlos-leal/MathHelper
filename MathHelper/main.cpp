@@ -7,6 +7,7 @@
 bool performOperation(int userChoice);
 bool projections();
 double dotProduct(bool isSilent, std::vector<double> v, std::vector<double> u);
+std::vector<double> crossProduct(bool isSilent, std::vector<double> v, std::vector<double> u);
 double findMagintude(bool isSilent, std::vector<double> v);
 std::vector<std::vector<double>> getMatrix();
 std::vector<double> getVector();
@@ -38,6 +39,7 @@ bool performOperation(int userChoice)
 		dotProduct(false, getVector(), getVector());
 		break;
 	case 2:
+		crossProduct(false, getVector(), getVector());
 		break;
 	case 3:
 		findMagintude(false, getVector());
@@ -122,6 +124,23 @@ double dotProduct(bool isSilent, std::vector<double> v, std::vector<double> u)
 	if(!isSilent)
 		std::cout << "The result is " << count << ".\n" << std::endl;
 	return count;
+}
+
+std::vector<double> crossProduct(bool isSilent, std::vector<double> v, std::vector<double> u)
+{
+	if (v.size() != 3 || u.size() != 3)
+	{
+		std::cout << "Make the vectors size 3, then try again." << std::endl;
+		return v;
+	}
+
+	std::vector<double> result(3);
+	result[0] = (v[1] * u[2]) - (v[2] * u[1]);
+	result[1] = (v[2] * u[0]) - (v[0] * u[2]);
+	result[2] = (v[0] * u[1]) - (v[1] * u[0]);
+
+	std::cout << "The cross product is " << formatVector(result) << std::endl << std::endl;
+	return result;
 }
 
 double findMagintude(bool isSilent, std::vector<double> v)
